@@ -6,6 +6,11 @@ hash pacstrap &>/dev/null || {
 	exit 1
 }
 
+[[ -z "$1" ]] && {
+    echo "Usage: $0 REPOSITORY[:TAG]"
+    exit 1
+}
+
 export LANG="C.UTF-8"
 
 ROOTFS=$(mktemp -d ${TMPDIR:-/var/tmp}/rootfs-archlinux-XXXXXXXXXX)
@@ -43,6 +48,5 @@ mknod -m 600 $DEV/initctl p
 mknod -m 666 $DEV/ptmx c 5 2
 ln -sf /proc/self/fd $DEV/fd
 
-TAG=$(date +%Y.%m.%d)
-tar --numeric-owner --xattrs --acls -C $ROOTFS -c . | docker import - "archlinux:$TAG"
-docker run -t --rm "archlinux:$TAG" echo "Created archlinux:$TAG"
+tar --numeric-owner --xattrs --acls -C $ROOTFS -c . | docker import - "$1"
+docker run -t --rm "$1" echo "$1"
