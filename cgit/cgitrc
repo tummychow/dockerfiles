@@ -6,7 +6,7 @@ enable-log-filecount=1
 enable-log-linecount=1
 enable-subject-links=1
 snapshots=tar.gz zip
-
+mimetype-file=/etc/mime.types
 virtual-root=/
 
 enable-http-clone=1
