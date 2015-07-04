@@ -29,6 +29,9 @@ arch-chroot $ROOTFS /bin/sh -c 'haveged -w 1024; pacman-key --init; pkill havege
 arch-chroot $ROOTFS /bin/sh -c 'ln -s /usr/share/zoneinfo/UTC /etc/localtime'
 echo 'en_US.UTF-8 UTF-8' > $ROOTFS/etc/locale.gen
 arch-chroot $ROOTFS locale-gen
+# -C controls the configuration used by pacstrap, but we still have to add
+# configuration for the actual pacman inside the container
+arch-chroot $ROOTFS /bin/sh -c "echo Server = 'https://mirrors.kernel.org/archlinux/\$repo/os/\$arch' > /etc/pacman.d/mirrorlist"
 
 # udev doesn't work in containers, rebuild /dev
 DEV=$ROOTFS/dev
